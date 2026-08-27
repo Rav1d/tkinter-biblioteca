@@ -1,15 +1,15 @@
-import os
 from validaciones import validar_texto, validar_numero, validar_isbn
 from datos import libros
+from interfaz import limpiar_pantalla, pausar, pedir_dato, pedir_isbn, pedir_confirmacion, error
 
-#! LIMPIAR
-def limpiar_pantalla():
-    os.system('cls' if os.name == 'nt' else 'clear')
-    
-#! PAUSAR
-def pausar():
-    input("\n[P] Presione ENTRAR para continuar . . .")
-    
+#! REGISTRO VACIO
+def registro_vacio():
+    if not libros:
+        print("[!] No se encontraron libros.")
+        pausar()
+        return True
+    return False
+
 #! MOSTRAR LIBROS
 def mostrar_libros(id_libro):
     print(f"\n| ID: {id_libro}")
@@ -20,50 +20,6 @@ def mostrar_libros(id_libro):
     print(f"| Paginas: {libros[id_libro]['paginas']}")
     print(f"| Precio: ${libros[id_libro]['precio']}")
     print(f"| Disponible: {libros[id_libro]['disponible']}")
-
-#! REGISTRO VACIO
-def registro_vacio():
-    if not libros:
-        print("[!] No se encontraron libros.")
-        pausar()
-        return True
-    return False
-
-#! PEDIR DATO
-def pedir_dato(mensaje):
-    dato = input(mensaje)
-    return dato
-        
-    
-#! PEDIR ISBN
-def pedir_isbn():
-    while True:
-        isbn = input("ISBN: ")
-        if not isbn.isdigit():
-            print("\n[!] El ISBN debe contener solo números.")
-            pausar()
-            continue
-        if len(isbn) != 13:
-            print("\n[!] El ISBN debe contener exactamente 13 dígitos.")
-            pausar()
-            continue
-        return isbn
-    
-#! PEDIR CONFIRMACION
-def pedir_confirmacion(mensaje):
-    while True:
-        opcion = input(mensaje).lower()
-        if opcion == 's':
-            return True
-        elif opcion == 'n':
-            return False
-        else:
-            print("[!] Opcion incorrecta. Intente de nuevo")
-            pausar()
-    
-#! MENSAJE DE ERROR
-def error():
-    print("\n[!] Error. Intente de nuevo")
 
 #! AGREGAR
 def agregar_libro():
