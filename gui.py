@@ -10,14 +10,10 @@ def hola():
 frame_menu = tk.Frame(ventana)
 frame_agregar = tk.Frame(ventana)
 
+#! DICCIONARIOS
+entries_agregar = {}
+
 #! FUNCIONES
-def cambiar_frame(ocultar, mostrar):
-    ocultar.pack_forget()
-    mostrar.pack()
-    
-def ir_a_agregar():
-    cambiar_frame(frame_menu, frame_agregar)
-    
 def boton(raiz, mensaje, funcion):
     boton = tk.Button(raiz, text=mensaje, command=funcion)
     boton.pack()
@@ -35,7 +31,18 @@ def entry(raiz):
     campo.pack()
     return campo
 
+def cambiar_frame(ocultar, mostrar):
+    ocultar.pack_forget()
+    mostrar.pack()
     
+def ir_a_agregar():
+    cambiar_frame(frame_menu, frame_agregar)
+
+def ingresar_dato(raiz, mensaje, diccionario, llave):
+    label(raiz, mensaje)
+    diccionario[llave] = entry(raiz)
+    
+
 #! MENU  
 boton(frame_menu, "1. Agregar libro", ir_a_agregar)
 boton(frame_menu, "2. Editar libro", hola)
@@ -45,30 +52,16 @@ boton(frame_menu, "5. Listar libro", hola)
 boton_salir(frame_menu, "6. Salir")
 
 #! AGREGAR
-entries_agregar = {}
 
 label(frame_agregar, "AGREGAR NUEVO LIBRO")
 
-label(frame_agregar, "ID")
-entries_agregar["id"] = entry(frame_agregar)
-
-label(frame_agregar, "Titulo")
-entries_agregar["titulo"] = entry(frame_agregar)
-
-label(frame_agregar, "Autor")
-entries_agregar["autor"] = entry(frame_agregar)
-
-label(frame_agregar, "ISBN")
-entries_agregar["isbn"] = entry(frame_agregar)
-
-label(frame_agregar, "Editorial")
-entries_agregar["editorial"] = entry(frame_agregar)
-
-label(frame_agregar, "Paginas")
-entries_agregar["paginas"] = entry(frame_agregar)
-
-label(frame_agregar, "Precio")
-entries_agregar["precio"] = entry(frame_agregar)
+ingresar_dato(frame_agregar, "ID", entries_agregar, "id")
+ingresar_dato(frame_agregar, "Titulo", entries_agregar, "titulo")
+ingresar_dato(frame_agregar, "Autor", entries_agregar, "autor")
+ingresar_dato(frame_agregar, "ISBN", entries_agregar, "isbn")
+ingresar_dato(frame_agregar, "Editorial", entries_agregar, "editorial")
+ingresar_dato(frame_agregar, "Paginas", entries_agregar, "paginas")
+ingresar_dato(frame_agregar, "Precio", entries_agregar, "precio")
 
 #! FRAME MENU
 frame_menu.pack()
