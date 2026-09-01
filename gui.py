@@ -42,7 +42,15 @@ def ingresar_dato(raiz, mensaje, diccionario, llave):
     label(raiz, mensaje)
     diccionario[llave] = entry(raiz)
     
-
+def guardar_libro():
+    print(entries_agregar["id"].get())
+    print(entries_agregar["titulo"].get())
+    print(entries_agregar["autor"].get())
+    print(entries_agregar["isbn"].get())
+    print(entries_agregar["editorial"].get())
+    print(entries_agregar["paginas"].get())
+    print(entries_agregar["precio"].get())
+    
 #! MENU  
 boton(frame_menu, "1. Agregar libro", ir_a_agregar)
 boton(frame_menu, "2. Editar libro", hola)
@@ -62,6 +70,7 @@ ingresar_dato(frame_agregar, "ISBN", entries_agregar, "isbn")
 ingresar_dato(frame_agregar, "Editorial", entries_agregar, "editorial")
 ingresar_dato(frame_agregar, "Paginas", entries_agregar, "paginas")
 ingresar_dato(frame_agregar, "Precio", entries_agregar, "precio")
+boton(frame_agregar, "Guardar", guardar_libro)
 
 #! FRAME MENU
 frame_menu.pack()
