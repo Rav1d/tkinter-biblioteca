@@ -45,9 +45,30 @@ boton(frame_menu, "5. Listar libro", hola)
 boton_salir(frame_menu, "6. Salir")
 
 #! AGREGAR
+entries_agregar = {}
+
 label(frame_agregar, "AGREGAR NUEVO LIBRO")
-label(frame_agregar, "Titulo: ")
-entry_titulo = entry(frame_agregar)
+
+label(frame_agregar, "ID")
+entries_agregar["id"] = entry(frame_agregar)
+
+label(frame_agregar, "Titulo")
+entries_agregar["titulo"] = entry(frame_agregar)
+
+label(frame_agregar, "Autor")
+entries_agregar["autor"] = entry(frame_agregar)
+
+label(frame_agregar, "ISBN")
+entries_agregar["isbn"] = entry(frame_agregar)
+
+label(frame_agregar, "Editorial")
+entries_agregar["editorial"] = entry(frame_agregar)
+
+label(frame_agregar, "Paginas")
+entries_agregar["paginas"] = entry(frame_agregar)
+
+label(frame_agregar, "Precio")
+entries_agregar["precio"] = entry(frame_agregar)
 
 #! FRAME MENU
 frame_menu.pack()
