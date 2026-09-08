@@ -15,6 +15,7 @@ frame_agregar = tk.Frame(ventana)
 #! DICCIONARIOS
 entries_agregar = {}
 errores_agregar = {}    
+nuevo_libro = {}
 
 #! FUNCIONES
 def boton(raiz, mensaje, funcion):
@@ -84,7 +85,7 @@ def validar_campo_isbn(diccionario_agregar, diccionario_errores, mensaje):
 
 def validar_campo_id(diccionario_agregar, diccionario_errores, mensaje):
     id_libro = diccionario_agregar["id"].get()
-    id_libro_corregido = validar_numero(id, 1)
+    id_libro_corregido = validar_numero(id_libro, 1)
     if id_libro_corregido == False:
         diccionario_errores["id"].configure(text=mensaje)
         return False
@@ -105,6 +106,23 @@ def guardar_libro():
     isbn = validar_campo_isbn(entries_agregar, errores_agregar, "ISBN no valido o ya existe")
     paginas = validar_campo_numero(entries_agregar, errores_agregar, "paginas", "No. de paginas no valido")
     precio = validar_campo_numero(entries_agregar, errores_agregar, "precio", "Precio no valido")
+    
+    if id_libro != False and titulo != False and autor != False and editorial != False and isbn != False and paginas != False and precio != False:
+        
+        nuevo_libro = {
+            "titulo": titulo,
+            "autor": autor,
+            "editorial": editorial,
+            "isbn": isbn,
+            "paginas": paginas,
+            "precio": precio,
+            "disponible": True
+        }
+        
+        libros[id_libro] = nuevo_libro
+        mensaje_guardado.configure(text="Libro guardado correctamente")
+    
+    
         
 #! MENU  
 boton(frame_menu, "1. Agregar libro", ir_a_agregar)
@@ -126,6 +144,9 @@ ingresar_dato(frame_agregar, "Editorial", entries_agregar, errores_agregar, "edi
 ingresar_dato(frame_agregar, "Paginas", entries_agregar, errores_agregar, "paginas")
 ingresar_dato(frame_agregar, "Precio", entries_agregar, errores_agregar, "precio")
 boton(frame_agregar, "Guardar", guardar_libro)
+mensaje_guardado = label(frame_agregar, "")
+
+
 
 #! FRAME MENU
 frame_menu.pack()
