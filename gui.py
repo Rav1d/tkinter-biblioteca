@@ -1,5 +1,6 @@
 import tkinter as tk
-from validaciones import validar_texto
+from validaciones import validar_texto, validar_numero, validar_isbn
+from datos import libros
 
 ventana = tk.Tk()
 ventana.title("Sistema de Gestión de Libros")
@@ -55,13 +56,56 @@ def validar_campo_texto(diccionario_agregar, diccionario_errores, nombre_llave, 
         diccionario_errores[nombre_llave].configure(text="")
         
     return campo_corregido
+
+def validar_campo_numero(diccionario_agregar, diccionario_errores, nombre_llave, mensaje):
+    nombre_campo = diccionario_agregar[nombre_llave].get()
+    campo_corregido = validar_numero(nombre_campo, 1)
+    if campo_corregido == False:
+        diccionario_errores[nombre_llave].configure(text=mensaje)
+    else:
+        diccionario_errores[nombre_llave].configure(text="")
+        
+    return campo_corregido
+
+def validar_campo_isbn(diccionario_agregar, diccionario_errores, mensaje):
+    isbn = diccionario_agregar["isbn"].get()
+    isbn_corregido = validar_isbn(isbn)
+    if isbn_corregido == False:
+        diccionario_errores["isbn"].configure(text=mensaje)
+        return False
+    
+    for libro in libros.values():
+        if libro["isbn"] == isbn_corregido:
+            diccionario_errores["isbn"].configure(text=mensaje)
+            return False
+    
+    diccionario_errores["isbn"].configure(text="")
+    return isbn_corregido
+
+def validar_campo_id(diccionario_agregar, diccionario_errores, mensaje):
+    id_libro = diccionario_agregar["id"].get()
+    id_libro_corregido = validar_numero(id, 1)
+    if id_libro_corregido == False:
+        diccionario_errores["id"].configure(text=mensaje)
+        return False
+    
+    if id_libro_corregido in libros:
+        diccionario_errores["id"].configure(text=mensaje)
+        return False
+    
+    diccionario_errores["id"].configure(text="")
+    return id_libro_corregido
+    
     
 def guardar_libro():
+    id_libro =  validar_campo_id(entries_agregar, errores_agregar, "ID no valido o ya existe")
     titulo = validar_campo_texto(entries_agregar, errores_agregar, "titulo", "Titulo no valido")
     autor = validar_campo_texto(entries_agregar, errores_agregar, "autor", "Autor no valido")
     editorial = validar_campo_texto(entries_agregar, errores_agregar, "editorial", "Editorial no valida")
+    isbn = validar_campo_isbn(entries_agregar, errores_agregar, "ISBN no valido o ya existe")
+    paginas = validar_campo_numero(entries_agregar, errores_agregar, "paginas", "No. de paginas no valido")
+    precio = validar_campo_numero(entries_agregar, errores_agregar, "precio", "Precio no valido")
         
-    
 #! MENU  
 boton(frame_menu, "1. Agregar libro", ir_a_agregar)
 boton(frame_menu, "2. Editar libro", hola)

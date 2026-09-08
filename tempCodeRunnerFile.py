@@ -1,2 +1,1 @@
-
-label(raiz, mensaje)
+isbn_corregido
