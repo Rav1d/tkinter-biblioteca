@@ -126,7 +126,8 @@ def guardar_libro():
         
         libros[id_libro] = nuevo_libro
         mensaje_guardado.configure(text="Libro guardado correctamente")
-    
+        for entry in entries_agregar.values():
+            entry.delete(0, tk.END)
     
         
 #! MENU  
@@ -138,9 +139,7 @@ boton(frame_menu, "5. Listar libro", hola)
 boton_salir(frame_menu, "6. Salir")
 
 #! AGREGAR
-
 label(frame_agregar, "AGREGAR NUEVO LIBRO")
-
 ingresar_dato(frame_agregar, "ID", entries_agregar, errores_agregar, "id")
 ingresar_dato(frame_agregar, "Titulo", entries_agregar, errores_agregar, "titulo")
 ingresar_dato(frame_agregar, "Autor", entries_agregar, errores_agregar, "autor")
@@ -151,8 +150,6 @@ ingresar_dato(frame_agregar, "Precio", entries_agregar, errores_agregar, "precio
 boton(frame_agregar, "Guardar", guardar_libro)
 mensaje_guardado = label(frame_agregar, "")
 boton(frame_agregar, "Regresar", regresar)
-
-
 
 #! FRAME MENU
 frame_menu.pack()
