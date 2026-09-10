@@ -1,1 +1,12 @@
-isbn_corregido
+label(frame_agregar, "AGREGAR NUEVO LIBRO")
+
+ingresar_dato(frame_agregar, "ID", entries_agregar, errores_agregar, "id")
+ingresar_dato(frame_agregar, "Titulo", entries_agregar, errores_agregar, "titulo")
+ingresar_dato(frame_agregar, "Autor", entries_agregar, errores_agregar, "autor")
+ingresar_dato(frame_agregar, "ISBN", entries_agregar, errores_agregar, "isbn")
+ingresar_dato(frame_agregar, "Editorial", entries_agregar, errores_agregar, "editorial")
+ingresar_dato(frame_agregar, "Paginas", entries_agregar, errores_agregar, "paginas")
+ingresar_dato(frame_agregar, "Precio", entries_agregar, errores_agregar, "precio")
+boton(frame_agregar, "Guardar", guardar_libro)
+mensaje_guardado = label(frame_agregar, "")
+boton(frame_agregar, "Regresar", regresar)

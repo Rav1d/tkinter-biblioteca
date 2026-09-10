@@ -40,8 +40,13 @@ def cambiar_frame(ocultar, mostrar):
     ocultar.pack_forget()
     mostrar.pack()
     
+def regresar():
+    cambiar_frame(frame_agregar, frame_menu)
+    
 def ir_a_agregar():
     cambiar_frame(frame_menu, frame_agregar)
+    
+    
 
 def ingresar_dato(raiz, mensaje, diccionario, diccionario_errores, llave):
     label(raiz, mensaje)
@@ -145,6 +150,7 @@ ingresar_dato(frame_agregar, "Paginas", entries_agregar, errores_agregar, "pagin
 ingresar_dato(frame_agregar, "Precio", entries_agregar, errores_agregar, "precio")
 boton(frame_agregar, "Guardar", guardar_libro)
 mensaje_guardado = label(frame_agregar, "")
+boton(frame_agregar, "Regresar", regresar)
 
 
 
