@@ -11,11 +11,16 @@ def hola():
 #! FRAMES
 frame_menu = tk.Frame(ventana)
 frame_agregar = tk.Frame(ventana)
+frame_editar = tk.Frame(ventana)
+frame_buscar_editar = tk.Frame(ventana)
 
 #! DICCIONARIOS
 entries_agregar = {}
 errores_agregar = {}    
 nuevo_libro = {}
+
+entries_editar_buscar = {}
+errores_editar_buscar = {}
 
 #! FUNCIONES
 def boton(raiz, mensaje, funcion):
@@ -36,18 +41,28 @@ def entry(raiz):
     campo.pack()
     return campo
 
+#! VENTANAS
 def cambiar_frame(ocultar, mostrar):
     ocultar.pack_forget()
     mostrar.pack()
     
-def regresar():
+def regresar_agregar_menu():
     cambiar_frame(frame_agregar, frame_menu)
+    
+def regresar_editar_menu():
+    cambiar_frame(frame_buscar_editar, frame_menu)
     
 def ir_a_agregar():
     cambiar_frame(frame_menu, frame_agregar)
     
+def ir_a_editar_buscar():
+    cambiar_frame(frame_menu, frame_buscar_editar)
+    
+def ir_a_editar():
+    cambiar_frame(frame_buscar_editar, frame_editar)
     
 
+#! VALIDACIONES Y CAMPOS
 def ingresar_dato(raiz, mensaje, diccionario, diccionario_errores, llave):
     label(raiz, mensaje)
     diccionario[llave] = entry(raiz)
@@ -102,7 +117,7 @@ def validar_campo_id(diccionario_agregar, diccionario_errores, mensaje):
     diccionario_errores["id"].configure(text="")
     return id_libro_corregido
     
-    
+#! GUARDAR LIBRO
 def guardar_libro():
     id_libro =  validar_campo_id(entries_agregar, errores_agregar, "ID no valido o ya existe")
     titulo = validar_campo_texto(entries_agregar, errores_agregar, "titulo", "Titulo no valido")
@@ -127,12 +142,18 @@ def guardar_libro():
         libros[id_libro] = nuevo_libro
         mensaje_guardado.configure(text="Libro guardado correctamente")
         for entry in entries_agregar.values():
-            entry.delete(0, tk.END)
+            entry.delete(0, tk.END) 
+            
+#! BUSCAR EDITAR LIBRO
+def buscar_editar_libro():
+    id_libro = entries_editar_buscar["id"].get()
+    id_libro_corregido =  validar_numero(id_libro, 1)
+    if id_libro_corregido == False:
+        errores_editar_buscar["id"].configure(text="ID no valido")
     
-        
 #! MENU  
 boton(frame_menu, "1. Agregar libro", ir_a_agregar)
-boton(frame_menu, "2. Editar libro", hola)
+boton(frame_menu, "2. Editar libro", ir_a_editar_buscar)
 boton(frame_menu, "3. Eliminar libro", hola)
 boton(frame_menu, "4. Buscar libro", hola)
 boton(frame_menu, "5. Listar libro", hola)
@@ -149,7 +170,16 @@ ingresar_dato(frame_agregar, "Paginas", entries_agregar, errores_agregar, "pagin
 ingresar_dato(frame_agregar, "Precio", entries_agregar, errores_agregar, "precio")
 boton(frame_agregar, "Guardar", guardar_libro)
 mensaje_guardado = label(frame_agregar, "")
-boton(frame_agregar, "Regresar", regresar)
+boton(frame_agregar, "Regresar", regresar_agregar_menu)
+
+#! BUSCAR EDITAR
+label(frame_buscar_editar, "BUSCAR LIBRO A EDITAR")
+ingresar_dato(frame_buscar_editar, "ID", entries_editar_buscar, errores_editar_buscar, "id")
+boton(frame_buscar_editar, "Buscar", hola)
+boton(frame_buscar_editar, "Regresar", regresar_editar_menu)
+
+#! BUSCAR
+label(frame_editar, "EDITAR LIBRO")
 
 #! FRAME MENU
 frame_menu.pack()
