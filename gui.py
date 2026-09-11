@@ -22,6 +22,9 @@ nuevo_libro = {}
 entries_editar_buscar = {}
 errores_editar_buscar = {}
 
+entries_editar = {}
+errores_editar = {}
+
 #! FUNCIONES
 def boton(raiz, mensaje, funcion):
     boton = tk.Button(raiz, text=mensaje, command=funcion)
@@ -136,7 +139,6 @@ def guardar_libro():
             "isbn": isbn,
             "paginas": paginas,
             "precio": precio,
-            "disponible": True
         }
         
         libros[id_libro] = nuevo_libro
@@ -149,8 +151,15 @@ def buscar_editar_libro():
     id_libro = entries_editar_buscar["id"].get()
     id_libro_corregido =  validar_numero(id_libro, 1)
     if id_libro_corregido == False:
-        errores_editar_buscar["id"].configure(text="ID no valido")
-    
+        errores_editar_buscar["id"].configure(text="ID no valido") 
+    elif id_libro_corregido not in libros:
+        errores_editar_buscar["id"].configure(text="ID no encontrado")
+    else:
+        mensaje_id_editado.configure(text=f"ID: {entries_editar_buscar["id"].get()}" )
+        ir_a_editar()
+        
+#! EDITAR LIBRO
+        
 #! MENU  
 boton(frame_menu, "1. Agregar libro", ir_a_agregar)
 boton(frame_menu, "2. Editar libro", ir_a_editar_buscar)
@@ -175,13 +184,20 @@ boton(frame_agregar, "Regresar", regresar_agregar_menu)
 #! BUSCAR EDITAR
 label(frame_buscar_editar, "BUSCAR LIBRO A EDITAR")
 ingresar_dato(frame_buscar_editar, "ID", entries_editar_buscar, errores_editar_buscar, "id")
-boton(frame_buscar_editar, "Buscar", hola)
+boton(frame_buscar_editar, "Buscar", buscar_editar_libro)
 boton(frame_buscar_editar, "Regresar", regresar_editar_menu)
 
-#! BUSCAR
-label(frame_editar, "EDITAR LIBRO")
+#! EDITAR
+label(frame_editar, "LIBRO ENCONTRADO")
+mensaje_id_editado = label(frame_editar, "")
+ingresar_dato(frame_editar, "Titulo", entries_editar, errores_editar, "titulo")
+ingresar_dato(frame_editar, "Autor", entries_editar, errores_editar, "autor")
+ingresar_dato(frame_editar, "ISBN", entries_editar, errores_editar, "isbn") 
+ingresar_dato(frame_editar, "Editorial", entries_editar, errores_editar, "editorial")
+ingresar_dato(frame_editar, "Paginas", entries_editar, errores_editar, "paginas")
+ingresar_dato(frame_editar, "Precio", entries_editar, errores_editar, "precio")
+
 
 #! FRAME MENU
 frame_menu.pack()
-
 ventana.mainloop()
