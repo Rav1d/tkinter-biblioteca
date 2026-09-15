@@ -52,8 +52,11 @@ def cambiar_frame(ocultar, mostrar):
 def regresar_agregar_menu():
     cambiar_frame(frame_agregar, frame_menu)
     
-def regresar_editar_menu():
+def regresar_buscar_editar_menu():
     cambiar_frame(frame_buscar_editar, frame_menu)
+    
+def regresar_editar_menu():
+    cambiar_frame(frame_editar, frame_menu)
     
 def ir_a_agregar():
     cambiar_frame(frame_menu, frame_agregar)
@@ -146,7 +149,7 @@ def guardar_libro():
         for entry in entries_agregar.values():
             entry.delete(0, tk.END) 
             
-#! BUSCAR EDITAR LIBRO
+#! BUSCAR EDITAR LIBRO - EDITAR LIBRO
 def buscar_editar_libro():
     id_libro = entries_editar_buscar["id"].get()
     id_libro_corregido =  validar_numero(id_libro, 1)
@@ -155,10 +158,11 @@ def buscar_editar_libro():
     elif id_libro_corregido not in libros:
         errores_editar_buscar["id"].configure(text="ID no encontrado")
     else:
-        mensaje_id_editado.configure(text=f"ID: {entries_editar_buscar["id"].get()}" )
+        mensaje_id_editado.configure(text=f'ID: {entries_editar_buscar["id"].get()}')
         ir_a_editar()
-        
-#! EDITAR LIBRO
+        for llave, entry in entries_editar.items():
+            entry.delete(0, tk.END)
+            entry.insert(0, libros[id_libro_corregido][llave])
         
 #! MENU  
 boton(frame_menu, "1. Agregar libro", ir_a_agregar)
@@ -185,7 +189,7 @@ boton(frame_agregar, "Regresar", regresar_agregar_menu)
 label(frame_buscar_editar, "BUSCAR LIBRO A EDITAR")
 ingresar_dato(frame_buscar_editar, "ID", entries_editar_buscar, errores_editar_buscar, "id")
 boton(frame_buscar_editar, "Buscar", buscar_editar_libro)
-boton(frame_buscar_editar, "Regresar", regresar_editar_menu)
+boton(frame_buscar_editar, "Regresar", regresar_buscar_editar_menu)
 
 #! EDITAR
 label(frame_editar, "LIBRO ENCONTRADO")
@@ -196,6 +200,9 @@ ingresar_dato(frame_editar, "ISBN", entries_editar, errores_editar, "isbn")
 ingresar_dato(frame_editar, "Editorial", entries_editar, errores_editar, "editorial")
 ingresar_dato(frame_editar, "Paginas", entries_editar, errores_editar, "paginas")
 ingresar_dato(frame_editar, "Precio", entries_editar, errores_editar, "precio")
+boton(frame_editar, "Guardar cambios", hola)
+mensaje_guardado_editar = label(frame_editar, "")
+boton(frame_editar, "Regresar", regresar_editar_menu)
 
 
 #! FRAME MENU
