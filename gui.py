@@ -14,7 +14,7 @@ frame_agregar = tk.Frame(ventana)
 frame_editar = tk.Frame(ventana)
 frame_buscar_editar = tk.Frame(ventana)
 
-#! DICCIONARIOS
+#! DICCIONARIOS Y VARIABLES
 entries_agregar = {}
 errores_agregar = {}    
 nuevo_libro = {}
@@ -24,6 +24,9 @@ errores_editar_buscar = {}
 
 entries_editar = {}
 errores_editar = {}
+
+id_libro_editando = None
+
 
 #! FUNCIONES
 def boton(raiz, mensaje, funcion):
@@ -151,6 +154,7 @@ def guardar_libro():
             
 #! BUSCAR EDITAR LIBRO - EDITAR LIBRO
 def buscar_editar_libro():
+    global id_libro_editando
     id_libro = entries_editar_buscar["id"].get()
     id_libro_corregido =  validar_numero(id_libro, 1)
     if id_libro_corregido == False:
