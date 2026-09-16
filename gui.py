@@ -125,6 +125,23 @@ def validar_campo_id(diccionario_agregar, diccionario_errores, mensaje):
     
     diccionario_errores["id"].configure(text="")
     return id_libro_corregido
+
+def validar_isbn_editar(diccionario_editar, diccionario_errores, mensaje):
+    isbn = diccionario_editar["isbn"].get()
+    isbn_corregido = validar_isbn(isbn)   
+    if isbn_corregido == False:
+        diccionario_errores["isbn"].configure(text=mensaje)
+        return False
+        
+    for id_libro, libro in libros.items():
+        if libro["isbn"] == isbn_corregido and id_libro != id_libro_editando:
+            diccionario_errores["isbn"].configure(text=mensaje)
+            isbn_corregido = False
+            
+    if isbn_corregido != False:
+        diccionario_errores["isbn"].configure(text="")
+        
+    return isbn_corregido
     
 #! GUARDAR LIBRO
 def guardar_libro():
@@ -162,12 +179,37 @@ def buscar_editar_libro():
     elif id_libro_corregido not in libros:
         errores_editar_buscar["id"].configure(text="ID no encontrado")
     else:
+        id_libro_editando = id_libro_corregido
         mensaje_id_editado.configure(text=f'ID: {entries_editar_buscar["id"].get()}')
         ir_a_editar()
         for llave, entry in entries_editar.items():
             entry.delete(0, tk.END)
             entry.insert(0, libros[id_libro_corregido][llave])
+            
+def guardar_libros_editar():
+    nuevo_titulo = validar_campo_texto(entries_editar, errores_editar, "titulo", "Titulo no valido")
+    nuevo_autor = validar_campo_texto(entries_editar, errores_editar, "autor", "Autor no valido")
+    nuevo_editorial = validar_campo_texto(entries_editar, errores_editar, "editorial", "Editorial no valida")
+    nuevo_isbn = validar_campo_isbn(entries_editar, errores_editar, "ISBN no valido o ya existe")
+    nuevo_paginas = validar_campo_numero(entries_editar, errores_editar, "paginas", "No. de paginas no valido")
+    nuevo_precio = validar_campo_numero(entries_editar, errores_editar, "precio", "Precio no valido")
+    
+    if nuevo_titulo != False and nuevo_autor != False and nuevo_editorial != False and nuevo_isbn != False and nuevo_paginas != False and nuevo_precio != False:
         
+        libro_editado = {
+                "titulo": nuevo_titulo,
+                "autor": nuevo_autor,
+                "editorial": nuevo_editorial,
+                "isbn": nuevo_isbn,
+                "paginas": nuevo_paginas,
+                "precio": nuevo_precio,
+            }
+            
+        libros[id_libro_editando] = libro_editado
+        mensaje_guardado_editar.configure(text="Libro editado correctamente")
+        for entry in entries_editar.values():
+            entry.delete(0, tk.END) 
+                
 #! MENU  
 boton(frame_menu, "1. Agregar libro", ir_a_agregar)
 boton(frame_menu, "2. Editar libro", ir_a_editar_buscar)
@@ -207,7 +249,6 @@ ingresar_dato(frame_editar, "Precio", entries_editar, errores_editar, "precio")
 boton(frame_editar, "Guardar cambios", hola)
 mensaje_guardado_editar = label(frame_editar, "")
 boton(frame_editar, "Regresar", regresar_editar_menu)
-
 
 #! FRAME MENU
 frame_menu.pack()

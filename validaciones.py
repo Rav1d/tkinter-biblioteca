@@ -30,4 +30,4 @@ def validar_isbn(isbn):
     isbn_corregido = isbn.strip()
     if len(isbn_corregido) == 13 and isbn_corregido.isdigit():
         return isbn_corregido
-    return False        
+    return False       
