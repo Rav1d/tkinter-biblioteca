@@ -13,6 +13,8 @@ frame_menu = tk.Frame(ventana)
 frame_agregar = tk.Frame(ventana)
 frame_editar = tk.Frame(ventana)
 frame_buscar_editar = tk.Frame(ventana)
+frame_buscar_eliminar = tk.Frame(ventana)
+frame_eliminar = tk.Frame(ventana)
 
 #! DICCIONARIOS Y VARIABLES
 entries_agregar = {}
@@ -25,7 +27,14 @@ errores_editar_buscar = {}
 entries_editar = {}
 errores_editar = {}
 
+entries_eliminar_buscar = {}
+errores_eliminar_buscar = {}
+
+entries_eliminar = {}
+errores_eliminar = {}
+
 id_libro_editando = None
+id_libro_eliminando = None
 
 
 #! FUNCIONES
@@ -61,6 +70,12 @@ def regresar_buscar_editar_menu():
 def regresar_editar_menu():
     cambiar_frame(frame_editar, frame_menu)
     
+def regresar_buscar_eliminar_menu():
+    cambiar_frame(frame_buscar_eliminar, frame_menu)
+    
+def regresar_eliminar_menu():
+    cambiar_frame(frame_eliminar, frame_menu)
+    
 def ir_a_agregar():
     cambiar_frame(frame_menu, frame_agregar)
     
@@ -69,6 +84,12 @@ def ir_a_editar_buscar():
     
 def ir_a_editar():
     cambiar_frame(frame_buscar_editar, frame_editar)
+    
+def ir_a_buscar_eliminar():
+    cambiar_frame(frame_menu, frame_buscar_eliminar)
+    
+def ir_a_eliminar():
+    cambiar_frame(frame_buscar_eliminar, frame_eliminar)
     
 
 #! VALIDACIONES Y CAMPOS
@@ -168,7 +189,9 @@ def guardar_libro():
         mensaje_guardado.configure(text="Libro guardado correctamente")
         for entry in entries_agregar.values():
             entry.delete(0, tk.END) 
-            
+        
+#! FUNCIONES
+
 #! BUSCAR EDITAR LIBRO - EDITAR LIBRO
 def buscar_editar_libro():
     global id_libro_editando
@@ -209,11 +232,36 @@ def guardar_libros_editar():
         mensaje_guardado_editar.configure(text="Libro editado correctamente")
         for entry in entries_editar.values():
             entry.delete(0, tk.END) 
+            
+def buscar_eliminar_libro():
+    global id_libro_eliminando
+    id_libro = entries_eliminar_buscar["id"].get()
+    id_libro_corregido = validar_numero(id_libro, 1)
+    if id_libro_corregido == False:
+        entries_eliminar_buscar["id"].configure(text="ID no valido")
+    elif id_libro_corregido not in libros:
+        entries_eliminar_buscar["id"].configure(text="ID no encontrado")
+    else:
+        id_libro_eliminando = id_libro_corregido
+        mensaje_id_eliminando.configure(text=f'ID: {entries_eliminar_buscar["id"].get()}')
+        ir_a_eliminar()
+        for llave, entry in entries_editar.items():
+            entry.delete(0, tk.END)
+            entry.insert(0, libros[id_libro_eliminando][llave])
+
+def eliminar_libro():
+    if id_libro_eliminando is not None:
+        del libros[id_libro_eliminando]
+        mensaje_libro_eliminado.configure(text="Libro eliminado correctamente")
+        for entry in entries_eliminar_buscar.values():
+            entry.delete(0, tk.END)
+            
+#! INTERFACES
                 
 #! MENU  
 boton(frame_menu, "1. Agregar libro", ir_a_agregar)
 boton(frame_menu, "2. Editar libro", ir_a_editar_buscar)
-boton(frame_menu, "3. Eliminar libro", hola)
+boton(frame_menu, "3. Eliminar libro", ir_a_buscar_eliminar)
 boton(frame_menu, "4. Buscar libro", hola)
 boton(frame_menu, "5. Listar libro", hola)
 boton_salir(frame_menu, "6. Salir")
@@ -249,6 +297,25 @@ ingresar_dato(frame_editar, "Precio", entries_editar, errores_editar, "precio")
 boton(frame_editar, "Guardar cambios", guardar_libros_editar)
 mensaje_guardado_editar = label(frame_editar, "")
 boton(frame_editar, "Regresar", regresar_editar_menu)
+
+#! ELIMINAR BUSCAR
+label(frame_buscar_eliminar, "BUSCAR LIBRO A ELIMINAR")
+ingresar_dato(frame_buscar_eliminar, "ID", entries_eliminar_buscar, errores_eliminar_buscar, "id")
+boton(frame_buscar_eliminar, "Buscar", buscar_eliminar_libro)
+boton(frame_buscar_eliminar, "Regresar", regresar_buscar_eliminar_menu)
+
+#! ELIMINAR
+label(frame_eliminar, "LIBRO ENCONTRADO")
+mensaje_id_eliminando = label(frame_eliminar, "")
+ingresar_dato(frame_eliminar, "Titulo", entries_eliminar, errores_editar, "titulo")
+ingresar_dato(frame_eliminar, "Autor", entries_eliminar, errores_editar, "autor")
+ingresar_dato(frame_eliminar, "ISBN", entries_eliminar, errores_editar, "isbn") 
+ingresar_dato(frame_eliminar, "Editorial", entries_eliminar, errores_editar, "editorial")
+ingresar_dato(frame_eliminar, "Paginas", entries_eliminar, errores_editar, "paginas")
+ingresar_dato(frame_eliminar, "Precio", entries_eliminar, errores_editar, "precio")
+boton(frame_eliminar, "Eliminar libro", eliminar_libro)
+mensaje_libro_eliminado = label(frame_eliminar, "")
+boton(frame_eliminar, "Regresar", regresar_eliminar_menu)
 
 #! FRAME MENU
 frame_menu.pack()
