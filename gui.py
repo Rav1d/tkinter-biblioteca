@@ -190,7 +190,7 @@ def guardar_libros_editar():
     nuevo_titulo = validar_campo_texto(entries_editar, errores_editar, "titulo", "Titulo no valido")
     nuevo_autor = validar_campo_texto(entries_editar, errores_editar, "autor", "Autor no valido")
     nuevo_editorial = validar_campo_texto(entries_editar, errores_editar, "editorial", "Editorial no valida")
-    nuevo_isbn = validar_campo_isbn(entries_editar, errores_editar, "ISBN no valido o ya existe")
+    nuevo_isbn = validar_isbn_editar(entries_editar, errores_editar, "ISBN no valido o ya existe")
     nuevo_paginas = validar_campo_numero(entries_editar, errores_editar, "paginas", "No. de paginas no valido")
     nuevo_precio = validar_campo_numero(entries_editar, errores_editar, "precio", "Precio no valido")
     
@@ -246,7 +246,7 @@ ingresar_dato(frame_editar, "ISBN", entries_editar, errores_editar, "isbn")
 ingresar_dato(frame_editar, "Editorial", entries_editar, errores_editar, "editorial")
 ingresar_dato(frame_editar, "Paginas", entries_editar, errores_editar, "paginas")
 ingresar_dato(frame_editar, "Precio", entries_editar, errores_editar, "precio")
-boton(frame_editar, "Guardar cambios", hola)
+boton(frame_editar, "Guardar cambios", guardar_libros_editar)
 mensaje_guardado_editar = label(frame_editar, "")
 boton(frame_editar, "Regresar", regresar_editar_menu)
 
