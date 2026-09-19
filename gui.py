@@ -98,6 +98,10 @@ def ingresar_dato(raiz, mensaje, diccionario, diccionario_errores, llave):
     diccionario[llave] = entry(raiz)
     diccionario_errores[llave] = label(raiz, "")
     
+def mostrar_dato(raiz, mensaje, diccionario, llave):
+    label(raiz, mensaje)
+    diccionario[llave] = label(raiz, "")
+    
 def validar_campo_texto(diccionario_agregar, diccionario_errores, nombre_llave, mensaje):
     nombre_campo = diccionario_agregar[nombre_llave].get()
     campo_corregido = validar_texto(nombre_campo, 50)
@@ -238,23 +242,26 @@ def buscar_eliminar_libro():
     id_libro = entries_eliminar_buscar["id"].get()
     id_libro_corregido = validar_numero(id_libro, 1)
     if id_libro_corregido == False:
-        entries_eliminar_buscar["id"].configure(text="ID no valido")
+        errores_eliminar_buscar["id"].configure(text="ID no valido")
     elif id_libro_corregido not in libros:
-        entries_eliminar_buscar["id"].configure(text="ID no encontrado")
+        errores_eliminar_buscar["id"].configure(text="ID no encontrado")
     else:
         id_libro_eliminando = id_libro_corregido
         mensaje_id_eliminando.configure(text=f'ID: {entries_eliminar_buscar["id"].get()}')
         ir_a_eliminar()
-        for llave, entry in entries_editar.items():
-            entry.delete(0, tk.END)
-            entry.insert(0, libros[id_libro_eliminando][llave])
+        for llave, label in entries_eliminar.items():
+            label.configure(text=libros[id_libro_eliminando][llave])
 
 def eliminar_libro():
-    if id_libro_eliminando is not None:
-        del libros[id_libro_eliminando]
-        mensaje_libro_eliminado.configure(text="Libro eliminado correctamente")
-        for entry in entries_eliminar_buscar.values():
-            entry.delete(0, tk.END)
+    del libros[id_libro_eliminando]
+    mensaje_libro_no_eliminado.configure(text="")
+    mensaje_libro_eliminado.configure(text="Libro eliminado correctamente")
+    for label in entries_eliminar.values():
+            label.configure(text="")
+            
+def cancelar_eliminar():
+    mensaje_libro_no_eliminado.configure(text="Se cancelo la eliminacion")
+    mensaje_libro_eliminado.configure(text="")
             
 #! INTERFACES
                 
@@ -307,14 +314,17 @@ boton(frame_buscar_eliminar, "Regresar", regresar_buscar_eliminar_menu)
 #! ELIMINAR
 label(frame_eliminar, "LIBRO ENCONTRADO")
 mensaje_id_eliminando = label(frame_eliminar, "")
-ingresar_dato(frame_eliminar, "Titulo", entries_eliminar, errores_editar, "titulo")
-ingresar_dato(frame_eliminar, "Autor", entries_eliminar, errores_editar, "autor")
-ingresar_dato(frame_eliminar, "ISBN", entries_eliminar, errores_editar, "isbn") 
-ingresar_dato(frame_eliminar, "Editorial", entries_eliminar, errores_editar, "editorial")
-ingresar_dato(frame_eliminar, "Paginas", entries_eliminar, errores_editar, "paginas")
-ingresar_dato(frame_eliminar, "Precio", entries_eliminar, errores_editar, "precio")
-boton(frame_eliminar, "Eliminar libro", eliminar_libro)
+mostrar_dato(frame_eliminar, "Titulo", entries_eliminar, "titulo")
+mostrar_dato(frame_eliminar, "Autor", entries_eliminar, "autor")
+mostrar_dato(frame_eliminar, "ISBN", entries_eliminar, "isbn")
+mostrar_dato(frame_eliminar, "Editorial", entries_eliminar, "editorial")
+mostrar_dato(frame_eliminar, "Paginas", entries_eliminar, "paginas")
+mostrar_dato(frame_eliminar, "Precio", entries_eliminar, "precio")
+label(frame_eliminar, "¿Desea eliminar el libro?")
+boton(frame_eliminar, "Si", eliminar_libro)
+boton(frame_eliminar, "No", cancelar_eliminar)
 mensaje_libro_eliminado = label(frame_eliminar, "")
+mensaje_libro_no_eliminado = label(frame_eliminar, "")
 boton(frame_eliminar, "Regresar", regresar_eliminar_menu)
 
 #! FRAME MENU
