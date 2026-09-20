@@ -15,6 +15,8 @@ frame_editar = tk.Frame(ventana)
 frame_buscar_editar = tk.Frame(ventana)
 frame_buscar_eliminar = tk.Frame(ventana)
 frame_eliminar = tk.Frame(ventana)
+frame_buscar_libro = tk.Frame(ventana)
+frame_buscar = tk.Frame(ventana)
 
 #! DICCIONARIOS Y VARIABLES
 entries_agregar = {}
@@ -33,8 +35,15 @@ errores_eliminar_buscar = {}
 entries_eliminar = {}
 errores_eliminar = {}
 
+entries_buscar_libro = {}
+errores_buscar_libro = {}
+
+entries_buscar = {}
+errores_buscar = {}
+
 id_libro_editando = None
 id_libro_eliminando = None
+id_libro_buscando = None
 
 
 #! FUNCIONES
@@ -75,6 +84,12 @@ def regresar_buscar_eliminar_menu():
     
 def regresar_eliminar_menu():
     cambiar_frame(frame_eliminar, frame_menu)
+
+def regresar_buscar_libro_menu():
+    cambiar_frame(frame_buscar_libro, frame_menu)
+
+def regresar_buscar_menu():
+    cambiar_frame(frame_buscar, frame_menu)
     
 def ir_a_agregar():
     cambiar_frame(frame_menu, frame_agregar)
@@ -90,6 +105,12 @@ def ir_a_buscar_eliminar():
     
 def ir_a_eliminar():
     cambiar_frame(frame_buscar_eliminar, frame_eliminar)
+    
+def ir_a_buscar_libro():
+    cambiar_frame(frame_menu, frame_buscar_libro)
+
+def ir_a_buscar():
+    cambiar_frame(frame_buscar_libro, frame_buscar)
     
 
 #! VALIDACIONES Y CAMPOS
@@ -236,7 +257,8 @@ def guardar_libros_editar():
         mensaje_guardado_editar.configure(text="Libro editado correctamente")
         for entry in entries_editar.values():
             entry.delete(0, tk.END) 
-            
+
+#! ELIMINAR BUSCAR LIBRO - ELIMINAR LIBRO
 def buscar_eliminar_libro():
     global id_libro_eliminando
     id_libro = entries_eliminar_buscar["id"].get()
@@ -262,70 +284,102 @@ def eliminar_libro():
 def cancelar_eliminar():
     mensaje_libro_no_eliminado.configure(text="Se cancelo la eliminacion")
     mensaje_libro_eliminado.configure(text="")
-            
+    
+#! BUSCAR LIBRO POR ID - LIBRO BUSCADO
+def buscar_libro():
+    global id_libro_buscando
+    id_libro = entries_buscar_libro["id"].get()
+    id_libro_corregido = validar_numero(id_libro, 1)
+    if id_libro_corregido == False:
+        errores_buscar_libro["id"].configure(text="ID no valido")
+    elif id_libro_corregido not in libros:
+        errores_buscar_libro["id"].configure(text="ID no encontrado")
+    else:
+        id_libro_buscando = id_libro_corregido
+        mensaje_id_buscado.configure(text=f'ID: {entries_buscar_libro["id"].get()}')
+        ir_a_buscar()
+        for llave, label in entries_buscar.items():
+            label.configure(text=libros[id_libro_buscando][llave])
+                    
 #! INTERFACES
                 
 #! MENU  
 boton(frame_menu, "1. Agregar libro", ir_a_agregar)
 boton(frame_menu, "2. Editar libro", ir_a_editar_buscar)
 boton(frame_menu, "3. Eliminar libro", ir_a_buscar_eliminar)
-boton(frame_menu, "4. Buscar libro", hola)
-boton(frame_menu, "5. Listar libro", hola)
+boton(frame_menu, "4. Buscar libro", ir_a_buscar_libro)
 boton_salir(frame_menu, "6. Salir")
 
 #! AGREGAR
 label(frame_agregar, "AGREGAR NUEVO LIBRO")
-ingresar_dato(frame_agregar, "ID", entries_agregar, errores_agregar, "id")
-ingresar_dato(frame_agregar, "Titulo", entries_agregar, errores_agregar, "titulo")
-ingresar_dato(frame_agregar, "Autor", entries_agregar, errores_agregar, "autor")
-ingresar_dato(frame_agregar, "ISBN", entries_agregar, errores_agregar, "isbn")
-ingresar_dato(frame_agregar, "Editorial", entries_agregar, errores_agregar, "editorial")
-ingresar_dato(frame_agregar, "Paginas", entries_agregar, errores_agregar, "paginas")
-ingresar_dato(frame_agregar, "Precio", entries_agregar, errores_agregar, "precio")
+ingresar_dato(frame_agregar, "**ID**", entries_agregar, errores_agregar, "id")
+ingresar_dato(frame_agregar, "**Titulo**", entries_agregar, errores_agregar, "titulo")
+ingresar_dato(frame_agregar, "**Autor**", entries_agregar, errores_agregar, "autor")
+ingresar_dato(frame_agregar, "**ISBN**", entries_agregar, errores_agregar, "isbn")
+ingresar_dato(frame_agregar, "**Editorial**", entries_agregar, errores_agregar, "editorial")
+ingresar_dato(frame_agregar, "**Paginas**", entries_agregar, errores_agregar, "paginas")
+ingresar_dato(frame_agregar, "**Precio**", entries_agregar, errores_agregar, "precio")
 boton(frame_agregar, "Guardar", guardar_libro)
 mensaje_guardado = label(frame_agregar, "")
 boton(frame_agregar, "Regresar", regresar_agregar_menu)
 
 #! BUSCAR EDITAR
 label(frame_buscar_editar, "BUSCAR LIBRO A EDITAR")
-ingresar_dato(frame_buscar_editar, "ID", entries_editar_buscar, errores_editar_buscar, "id")
+ingresar_dato(frame_buscar_editar, "**ID**", entries_editar_buscar, errores_editar_buscar, "id")
 boton(frame_buscar_editar, "Buscar", buscar_editar_libro)
 boton(frame_buscar_editar, "Regresar", regresar_buscar_editar_menu)
 
 #! EDITAR
 label(frame_editar, "LIBRO ENCONTRADO")
 mensaje_id_editado = label(frame_editar, "")
-ingresar_dato(frame_editar, "Titulo", entries_editar, errores_editar, "titulo")
-ingresar_dato(frame_editar, "Autor", entries_editar, errores_editar, "autor")
-ingresar_dato(frame_editar, "ISBN", entries_editar, errores_editar, "isbn") 
-ingresar_dato(frame_editar, "Editorial", entries_editar, errores_editar, "editorial")
-ingresar_dato(frame_editar, "Paginas", entries_editar, errores_editar, "paginas")
-ingresar_dato(frame_editar, "Precio", entries_editar, errores_editar, "precio")
+ingresar_dato(frame_editar, "**Titulo**", entries_editar, errores_editar, "titulo")
+ingresar_dato(frame_editar, "**Autor**", entries_editar, errores_editar, "autor")
+ingresar_dato(frame_editar, "**ISBN**", entries_editar, errores_editar, "isbn") 
+ingresar_dato(frame_editar, "**Editorial**", entries_editar, errores_editar, "editorial")
+ingresar_dato(frame_editar, "**Paginas**", entries_editar, errores_editar, "paginas")
+ingresar_dato(frame_editar, "**Precio**", entries_editar, errores_editar, "precio")
 boton(frame_editar, "Guardar cambios", guardar_libros_editar)
 mensaje_guardado_editar = label(frame_editar, "")
 boton(frame_editar, "Regresar", regresar_editar_menu)
 
 #! ELIMINAR BUSCAR
 label(frame_buscar_eliminar, "BUSCAR LIBRO A ELIMINAR")
-ingresar_dato(frame_buscar_eliminar, "ID", entries_eliminar_buscar, errores_eliminar_buscar, "id")
+ingresar_dato(frame_buscar_eliminar, "**ID**", entries_eliminar_buscar, errores_eliminar_buscar, "id")
 boton(frame_buscar_eliminar, "Buscar", buscar_eliminar_libro)
 boton(frame_buscar_eliminar, "Regresar", regresar_buscar_eliminar_menu)
 
 #! ELIMINAR
 label(frame_eliminar, "LIBRO ENCONTRADO")
 mensaje_id_eliminando = label(frame_eliminar, "")
-mostrar_dato(frame_eliminar, "Titulo", entries_eliminar, "titulo")
-mostrar_dato(frame_eliminar, "Autor", entries_eliminar, "autor")
-mostrar_dato(frame_eliminar, "ISBN", entries_eliminar, "isbn")
-mostrar_dato(frame_eliminar, "Editorial", entries_eliminar, "editorial")
-mostrar_dato(frame_eliminar, "Paginas", entries_eliminar, "paginas")
-mostrar_dato(frame_eliminar, "Precio", entries_eliminar, "precio")
+mostrar_dato(frame_eliminar, "**Titulo**", entries_eliminar, "titulo")
+mostrar_dato(frame_eliminar, "**Autor**", entries_eliminar, "autor")
+mostrar_dato(frame_eliminar, "**ISBN**", entries_eliminar, "isbn")
+mostrar_dato(frame_eliminar, "**Editorial**", entries_eliminar, "editorial")
+mostrar_dato(frame_eliminar, "**Paginas**", entries_eliminar, "paginas")
+mostrar_dato(frame_eliminar, "**Precio**", entries_eliminar, "precio")
 label(frame_eliminar, "¿Desea eliminar el libro?")
 boton(frame_eliminar, "Si", eliminar_libro)
 boton(frame_eliminar, "No", cancelar_eliminar)
 mensaje_libro_eliminado = label(frame_eliminar, "")
 mensaje_libro_no_eliminado = label(frame_eliminar, "")
 boton(frame_eliminar, "Regresar", regresar_eliminar_menu)
+
+#! BUSCAR LIBRO
+label(frame_buscar_libro, "BUSCAR LIBRO")
+ingresar_dato(frame_buscar_libro, "**ID**", entries_buscar_libro, errores_buscar_libro, "id")
+boton(frame_buscar_libro, "Buscar", buscar_libro)
+boton(frame_buscar_libro, "Regresar", regresar_buscar_libro_menu)
+
+#! LIBRO ENCONTRADO
+label(frame_buscar, "LIBRO ENCONTRADO")
+mensaje_id_buscado = label(frame_buscar, "")
+mostrar_dato(frame_buscar, "**Titulo**", entries_buscar, "titulo")
+mostrar_dato(frame_buscar, "**Autor**", entries_buscar, "autor")
+mostrar_dato(frame_buscar, "**ISBN**", entries_buscar, "isbn")
+mostrar_dato(frame_buscar, "**Editorial**", entries_buscar, "editorial")
+mostrar_dato(frame_buscar, "**Paginas**", entries_buscar, "paginas")
+mostrar_dato(frame_buscar, "**Precio**", entries_buscar, "precio")
+boton(frame_buscar, "Regresar", regresar_buscar_menu)
 
 #! FRAME MENU
 frame_menu.pack()
