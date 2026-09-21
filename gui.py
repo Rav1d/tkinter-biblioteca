@@ -48,7 +48,7 @@ id_libro_buscando = None
 
 #! FUNCIONES
 def boton(raiz, mensaje, funcion):
-    boton = tk.Button(raiz, text=mensaje, command=funcion)
+    boton = tk.Button(raiz, text=mensaje, command=funcion, width=15, height=1)
     boton.pack()
     
 def boton_salir(raiz, mensaje):
@@ -61,7 +61,7 @@ def label(raiz, mensaje):
     return label
     
 def entry(raiz):
-    campo = tk.Entry(raiz)
+    campo = tk.Entry(raiz, bd=0, relief="raised", highlightthickness=1, highlightbackground="black", highlightcolor="black")
     campo.pack()
     return campo
 
